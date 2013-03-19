@@ -1,4 +1,5 @@
 #2003,2010 Stephen Melvin Jr  <stephenbmelvin@gmail.com>
+# Fixes for Debian Wheezy compilation 2013 ewe2 <ewetoo+spcplayer@gmail.com>
 
 NASM = nasm
 MAFLAGS = --prefix _ -f macho 
@@ -6,7 +7,7 @@ NAFLAGS = -f elf
 CC = gcc
 #CFLAGS = -W -Wall -pedantic -g
 MCFLAGS = -m32 -W -Wall -pedantic -framework CoreServices -framework AudioToolbox -framework CoreAudio -framework AudioUnit 
-LCFLAGS = -Wall -pedantic 
+LCFLAGS = -m32 -Wall -pedantic 
 SPC_IMPL = SNEeSe
 SPCIMPL_OBJS = SNEeSe/SPC700.o SNEeSe/SPCimpl.o
 LIB_OBJS = main.o dsp.o $(SPCIMPL_OBJS)
@@ -23,12 +24,12 @@ osx: SPCPLAYERFILE = spcplayerosx.c
 osx: spcplayer
 
 linux: CFLAGS = $(LCFLAGS)
-linux: AFLAGS = $(LAFLAGS)
+linux: AFLAGS = $(NAFLAGS)
 linux: SPCPLAYERFILE = spcplayerlinux.c
 linux: spcplayer
 
 spcplayer: libopenspc.a $(SPCPLAYERFILE)
-	gcc $(CFLAGS) $(SPCPLAYERFILE) -o spcplayer -lz ./libopenspc.a
+	gcc $(CFLAGS) $(SPCPLAYERFILE) -o spcplayer -L/usr/lib -lz ./libopenspc.a
 
 
 #install: libopenspc.so openspc.h
